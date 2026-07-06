@@ -1,13 +1,13 @@
 <x-layout >
     <main class='py-10'>
-    <section class="bg-white max-w-[600px] mx-auto p-10 border-2 mt-4">
+    <section class="bg-white max-w-150 mx-auto p-10 border-2 mt-4">
         <h1 class="text-3xl font-bold mb-4">
         Faça login
         </h1>
         <p>
         Insira suas credenciais para acessar sua conta.
         </p>
-        <form action="/login" method="POST" class="flex flex-col">
+        <form action="{{ route('login') }}" method="POST" class="flex flex-col">
             @csrf
 
             <div class="flex flex-col gap-2 mb-4">
@@ -27,8 +27,12 @@
                 @enderror
             </div>
 
-            <button type="submit" class="bg-white border-2 p-2">Entrar</button>
+            <button type="submit" class="bg-white border-2 p-2">Login</button>
+
         </form> 
+        <p class="mt-4 text-center">Não tem uma conta? 
+            <a href="{{ route('register') }}" class="text-blue-500 underline hover:opacity-50 transition">Cadastre-se</a>
+        </p>
     </section>
     </main>
 </x-layout>
