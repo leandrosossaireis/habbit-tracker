@@ -8,9 +8,7 @@ class SiteController extends Controller
     {
         $name = "Leandro";
         $habits = ['ler','correr', 'estudar', 'viajar'];
-        return view('home', [
-            'name' => $name,
-            'habits' => $habits,
-        ] );
+        
+        return view('home', compact('name', 'habits'));
     }
 }
