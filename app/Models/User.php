@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Habit;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
@@ -28,5 +30,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    // Usuario pode ter muitos hábitos, então definimos a relação hasMany
+    public function habits(): hasMany
+    {
+        return $this->hasMany(Habit::class,);
+    }
+
+    // Usuario pode ter muitos hábitos logados, então definimos a relação hasMany
+    public function habitslog(): hasMany
+    {
+        return $this->hasMany(HabitLog::class,);
     }
 }
