@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HabitController;
+
 
 
 
@@ -19,7 +21,9 @@ Route::post('/cadastro',[RegisterController::class, 'store'])->name('auth.regist
 Route::middleware('auth')->group(function () {
    //Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::match(['GET', 'POST'], '/logout', [LoginController::class, 'logout'])
-        ->middleware('logout.method')
-        ->name('logout');
-});
+    Route::match(['GET', 'POST'], '/logout', [LoginController::class, 'logout'])->middleware('logout.method')->name('logout');
+
+    //Habits
+    Route::get('/dashboard/habits/create', [HabitController::class, 'create'])->name('habits.create');
+    Route::post('/dashboard/habits', [HabitController::class, 'store'])->name('habits.store');
+    });
