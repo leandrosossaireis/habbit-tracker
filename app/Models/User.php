@@ -32,14 +32,14 @@ class User extends Authenticatable
         ];
     }
     // Usuario pode ter muitos hábitos, então definimos a relação hasMany
-    public function habits(): hasMany
+    public function habits(): HasMany
     {
-        return $this->hasMany(Habit::class,);
+        return $this->hasMany(Habit::class);
     }
 
     // Usuario pode ter muitos hábitos logados, então definimos a relação hasMany
-    public function habitslog(): hasMany
+    public function habitslog(): HasMany
     {
-        return $this->hasMany(HabitLog::class,);
+        return $this->hasMany(HabitLog::class);
     }
 }

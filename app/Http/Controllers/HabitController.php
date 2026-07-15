@@ -30,6 +30,30 @@ class HabitController extends Controller
         return redirect()->route('dashboard')->with('success', 'Hábito criado com sucesso!');
     }
 
+    public function storeLog(Habit $habit)
+    {
+        $user = Auth::user();
+        $today = now()->toDateString();
+
+        $log = $habit->habitLogs()->firstOrCreate(
+            [
+                'user_id' => $user->id,
+                'completed_at' => $today,
+            ],
+            [
+                'user_id' => $user->id,
+                'habit_id' => $habit->id,
+                'completed_at' => $today,
+            ]
+        );
+
+        $message = $log->wasRecentlyCreated
+            ? 'Hábito marcado como concluído hoje!'
+            : 'Hábito já marcado hoje.';
+
+        return redirect()->route('dashboard')->with('success', $message);
+    }
+
     /**
      * Display the specified resource.
      */
@@ -59,6 +83,8 @@ class HabitController extends Controller
      */
     public function destroy(Habit $habit)
     {
-        //
+        $habit->delete();
+
+        return redirect()->route('dashboard')->with('success', 'Hábito excluído com sucesso!');
     }
 }
