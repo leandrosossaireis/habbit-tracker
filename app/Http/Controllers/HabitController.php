@@ -9,7 +9,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class HabitController extends Controller
-{
+{   
+    public function index(): View
+    {
+        $habits = Auth::user()->habits;
+        
+        return view('dashboard', compact('habits'));
+    }
+
     use AuthorizesRequests;
     public function create(): View
     {
@@ -34,7 +41,7 @@ class HabitController extends Controller
             ]
         );
 
-        return redirect()->route('dashboard')->with('success', 'Hábito criado e marcado para hoje!');
+        return redirect()->route('habits.index')->with('success', 'Hábito criado e marcado para hoje!');
     }
 
     public function storeLog(Habit $habit)
@@ -60,7 +67,7 @@ class HabitController extends Controller
             ? 'Hábito marcado como concluído hoje!'
             : 'Hábito já marcado hoje.';
 
-        return redirect()->route('dashboard')->with('success', $message);
+        return redirect()->route('habits.index')->with('success', $message);
     }
 
     public function show(Habit $habit)
@@ -82,7 +89,7 @@ class HabitController extends Controller
 
         $habit->update($request->validated());
 
-        return redirect()->route('dashboard')->with('success', 'Hábito atualizado com sucesso!');
+        return redirect()->route('habits.index')->with('success', 'Hábito atualizado com sucesso!');
     }
 
     public function destroy(Habit $habit)
@@ -91,6 +98,6 @@ class HabitController extends Controller
 
         $habit->delete();
 
-        return redirect()->route('dashboard')->with('success', 'Hábito excluído com sucesso!');
+        return redirect()->route('habits.index')->with('success', 'Hábito excluído com sucesso!');
     }
 }
