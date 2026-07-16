@@ -25,9 +25,21 @@ class HabitController extends Controller
     {
         $validated = $request->validated();
 
-        Auth::user()->habits()->create($validated);
+        $habit = Auth::user()->habits()->create($validated);
 
-        return redirect()->route('dashboard')->with('success', 'Hábito criado com sucesso!');
+        $habit->habitLogs()->firstOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'completed_at' => now()->toDateString(),
+            ],
+            [
+                'user_id' => Auth::id(),
+                'habit_id' => $habit->id,
+                'completed_at' => now()->toDateString(),
+            ]
+        );
+
+        return redirect()->route('dashboard')->with('success', 'Hábito criado e marcado para hoje!');
     }
 
     public function storeLog(Habit $habit)
