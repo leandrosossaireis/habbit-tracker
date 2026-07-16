@@ -3,24 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Habit;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Http\Requests\HabitRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class HabitController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     */
+    use AuthorizesRequests;
     public function create(): View
     {
         return view('create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(HabitRequest $request)
     {
         $validated = $request->validated();
@@ -44,6 +39,8 @@ class HabitController extends Controller
 
     public function storeLog(Habit $habit)
     {
+        $this->authorize('log', $habit);
+
         $user = Auth::user();
         $today = now()->toDateString();
 
@@ -66,35 +63,32 @@ class HabitController extends Controller
         return redirect()->route('dashboard')->with('success', $message);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Habit $habit)
     {
+        $this->authorize('view', $habit);
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Habit $habit)
+    public function edit(Habit $habit): View
     {
-        //
+        $this->authorize('update', $habit);
+
+        return view('edit', compact('habit'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Habit $habit)
+    public function update(HabitRequest $request, Habit $habit)
     {
-        //
+        $this->authorize('update', $habit);
+
+        $habit->update($request->validated());
+
+        return redirect()->route('dashboard')->with('success', 'Hábito atualizado com sucesso!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Habit $habit)
     {
+        $this->authorize('delete', $habit);
+
         $habit->delete();
 
         return redirect()->route('dashboard')->with('success', 'Hábito excluído com sucesso!');

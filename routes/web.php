@@ -6,9 +6,7 @@ use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HabitController;
-
-
-
+use App\Models\Habit;
 
 //Site
 Route::get('/', [SiteController::class, 'index']);
@@ -28,4 +26,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/habits', [HabitController::class, 'store'])->name('habits.store');
     Route::post('/dashboard/habits/{habit}/logs', [HabitController::class, 'storeLog'])->name('habits.logs.store');
     Route::delete('/dashboard/habits/{habit}', [HabitController::class, 'destroy'])->name('habits.destroy');
+    Route::get('/dashboard/habits/{habit}/edit', [HabitController::class, 'edit'])->name('habits.edit');
+    Route::put('/dashboard/habits/{habit}',[HabitController::class, 'update'])->name('habits.update');
     });

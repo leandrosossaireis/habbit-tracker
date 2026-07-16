@@ -8,7 +8,7 @@
     </a>
 
     @session('success')
-        <div class='bg-green-500 text-white p-2 mt-4'>
+        <div class='bg-green-200 border-2 border-green-600 text-green-600 p-2 mt-4'>
             {{ session('success') }}
         </div> 
     @endsession
@@ -28,7 +28,9 @@
                         [{{ $item->habitLogs()->count() }}]
                     </p>
 
-                    <a href="{{ route('habit.edit') }}"></a>
+                    <a href="{{ route('habits.edit', $item->id) }}" class='bg-gray-400 p-1 hover:opacity-50 transition cursor-pointer'>
+                        <x-icons.edit />
+                    </a>
 
                     <form action="{{ route('habits.destroy', $item) }}" method="POST" class='inline'>
                         @csrf
