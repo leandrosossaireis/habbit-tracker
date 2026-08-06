@@ -25,13 +25,14 @@
                         <x-icons.edit />
                     </a>
 
-                    <form action="{{ route('habits.destroy', $item->id) }}" method="POST">
+                    <form action="{{ route('habits.destroy', $item->id) }}" method="POST" class='inline-flex'>
                         @csrf
                         @method('DELETE')
                         <button type="submit" class='bg-red-400 p-1 hover:opacity-50 transition cursor-pointer habit-shadow-lg'>
                             <x-icons.trash />
                         </button>
-                    </div>
+                    </form>
+                </div>
                 </li>
             @empty
                 <li>Nenhum hábito cadastrado</li>
