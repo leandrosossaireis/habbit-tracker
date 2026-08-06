@@ -1,11 +1,8 @@
 <x-layout >
-    <main class='py-10'>
-    <h1 class='font-bold text-4xl text-center'>
-        Dashboard
-    </h1>
-    <a href="{{ route('habits.create') }}" class='p-2 border-2 bg-white font-bold'>
-        Cadastrar Hábito
-    </a>
+    <main class='py-10 min-h-[calc(100vh-160px)] px-4'>
+
+    <x-navbar />
+    
 
     @session('success')
         <div class='bg-green-200 border-2 border-green-600 text-green-600 p-2 mt-4'>
@@ -14,36 +11,34 @@
     @endsession
 
     <div>
-        <h2 class='text-xl mt-4'>
-            Listagem dos Habitos:
+        <h2 class='text-lg mt-8 mb-4'>
+            {{ date('d/m/Y') }}
         </h2>
         <ul class='flex flex-col gap-2'>
             @forelse($habits as $item)
-                <li class='pl-4'>
-                    <div class='flex gap-2 items-center'>
-                    <p class='font-bold text-xl'>
-                        - {{ $item->name }}
-                    </p>
-                    <p>
-                        [{{ $item->habitLogs()->count() }}]
-                    </p>
-
-                    <a href="{{ route('habits.edit', $item->id) }}" class='bg-gray-400 p-1 hover:opacity-50 transition cursor-pointer'>
-                        <x-icons.edit />
-                    </a>
-
-                    <form action="{{ route('habits.destroy', $item) }}" method="POST" class='inline'>
+                @php
+                    $wasCompletedToday = $item->habitLogs()
+                        ->where('user_id', Auth()->id())
+                        ->whereDate('completed_at', now()->toDateString())
+                        ->exists();
+            
+                @endphp
+                <li class='habit-shadow-lg p-2 bg-orange-200 '>
+                    <form method='POST' action="{{ route('habits.toggle', $item->id) }}" class='flex gap-2 items-center' id="form-{{ $item->id }}">
                         @csrf
-                        @method('DELETE')
-                        <button type="submit" class='bg-red-500 p-1 hover:opacity-50 transition cursor-pointer'>
-                            <x-icons.trash />
-                        </button>
+
+                        
+                        <input type="checkbox" class="w-6 h-6" {{ $item->is_completed ? 'checked' : '' }} 
+                        {{ $wasCompletedToday ? 'checked' : '' }}
+                        onchange="document.getElementById('form-{{ $item->id }}').submit()">
+                    <p class='font-bold text-lg'>
+                        {{ $item->name }}
+                    </p>
                     </form>
-                    </div>
                 </li>
             @empty
                 <li>Nenhum hábito cadastrado</li>
-                <a href="/habits/create" class='bg-white p-2 border-2'>
+                <a href="habits/create" class='bg-white p-2 border-2'>
                     Cadastrar hábito
                 </a>
             @endforelse

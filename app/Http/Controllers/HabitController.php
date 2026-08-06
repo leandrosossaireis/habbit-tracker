@@ -7,6 +7,8 @@ use Illuminate\View\View;
 use App\Http\Requests\HabitRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\HabitLog;
+use Carbon\Carbon;
 
 class HabitController extends Controller
 {   
@@ -24,7 +26,8 @@ class HabitController extends Controller
     }
 
     public function store(HabitRequest $request)
-    {
+    {   
+
         $validated = $request->validated();
 
         $habit = Auth::user()->habits()->create($validated);
@@ -100,4 +103,36 @@ class HabitController extends Controller
 
         return redirect()->route('habits.index')->with('success', 'Hábito excluído com sucesso!');
     }
-}
+
+    public function settings(): View
+    {
+        $habits = Auth::user()->habits;
+        return view('settings', compact('habits'));
+    }
+    public function toggle(Habit $habit)
+    {
+        if ($habit->user_id !== Auth::user()->id) {
+            abort(403, 'Esse hábito não pertence a você.');
+        };
+        
+        $today = Carbon::today()->toDateString();
+        
+        $log = HabitLog::query()
+            ->where('habit_id', $habit->id)
+            ->where('completed_at', $today)
+            ->first();
+
+        if ($log) {
+            $log->delete();
+            $message = 'Hábito desmarcado para hoje.';
+        } else {
+            HabitLog::create([
+                'habit_id' => $habit->id,
+                'user_id' => Auth::id(),
+                'completed_at' => $today,
+            
+            ]);
+            $message = 'Hábito marcado como concluído para hoje.';
+        }
+        return redirect()->route('habits.index')->with('success', $message);
+}}

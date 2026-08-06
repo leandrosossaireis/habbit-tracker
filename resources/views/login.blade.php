@@ -1,6 +1,6 @@
 <x-layout >
     <main class='py-10'>
-    <section class="bg-white max-w-150 mx-auto p-10 border-2 mt-4">
+    <section class="bg-white max-w-150 mx-auto p-10 mt-4 habit-shadow-lg">
         <h1 class="text-3xl font-bold mb-4">
         Faça login
         </h1>
@@ -13,7 +13,7 @@
             <div class="flex flex-col gap-2 mb-4">
                 <label for="email">Email</label>
 
-                <input type="email" name="email" placeholder="Digite seu email" class="bg-white p-2 border-2 @error ('email') border-red-500 @enderror"/>
+                <input type="email" name="email" placeholder="Digite seu email" class="bg-white p-2 habit-shadow @error ('email') border-red-500 @enderror"/>
                 @error('email')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
@@ -21,13 +21,13 @@
 
             <div class="flex flex-col gap-2 mb-4">
                 <label for="password">Senha</label>
-                <input type="password" name="password" placeholder="********" class="bg-white p-2 border-2 @error ('password') border-red-500 @enderror"/>
+                <input type="password" name="password" placeholder="********" class="bg-white p-2 habit-shadow @error ('password') border-red-500 @enderror"/>
                 @error('password')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
 
-            <button type="submit" class="bg-white border-2 p-2">Login</button>
+            <button type="submit" class="bg-habit-orange habit-shadow-lg p-2 habit-btn">Login</button>
 
         </form> 
         <p class="mt-4 text-center">Não tem uma conta? 
